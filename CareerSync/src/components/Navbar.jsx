@@ -4,9 +4,9 @@ import logo from '../assets/CareerSynclogo.png'
 
 const Navbar = () => {
   return (
-    <div className='flex flex-row justify-evenly items-center bg-blue-400 p-4 text-3xl font-bold text-white'>
-      <Link to ={"/"} className='hover:bg-blue-700'>
-      <img src={logo} alt='CareerSync' className='h-10 w-10'/>
+    <div className='flex flex-row justify-evenly items-center bg-gray-100 p-4 text-3xl font-bold text-blue-500'>
+      <Link to ={"/"} className='bg-gray-100 hover:bg-blue-700'>
+      <img src={logo} alt='CareerSync' className='h-30 w-50'/>
       </Link>
       <Link to={"/"} className='hover:text-blue-700'>Dashboard</Link>
       <Link to={"/login"} className='hover:text-blue-700'>Login</Link>

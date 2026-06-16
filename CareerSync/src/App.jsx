@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Layout from './components/Layout'
+import Notfound from './pages/Notfound'
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+         <Route path="*" element={<Notfound />} />
       </Routes>
+     
     </Layout>
     </BrowserRouter>
   )
