@@ -13,8 +13,8 @@ const Signup = () => {
     console.log("Password:", password)
   }
   return (
-    <div className='flex flex-col justify-center items-center h-[500px]  bg-gray-100 w-100 m-auto border-2 border-gray-300 rounded-lg shadow-lg text-blue-500 my-25'>
-      <h1 className='text-3xl text-black font-bold mb-4'>Signup</h1>
+    <div className='flex flex-col justify-center items-center h-[500px]  bg-slate-900 w-100 m-auto border-2 border-gray-300 rounded-lg shadow-xl shadow-slate-500 text-slate-100 my-25'>
+      <h1 className='text-3xl text-slate-100 font-bold mb-4'>Signup</h1>
       <form onSubmit={handleSubmit} className='flex flex-col'>
         <input type='text' placeholder='Enter name' value={name} onChange={(e)=>{setName(e.target.value)}} className=' border-2 border-gray-300 rounded-lg shadow-md p-2 text-xl mb-4'/>
           <input type="email" placeholder="Email" className='mb-4 border-2 border-gray-300 rounded-lg shadow-md p-2 text-xl' value={email} onChange={(e) => setEmail(e.target.value)} />
