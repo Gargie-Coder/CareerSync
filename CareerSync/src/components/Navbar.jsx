@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/CareerSynclogo3.jpg'
+
+
 
 const Navbar = () => {
+  
   return (
     <div className='max-w-10xl flex flex-wrap justify-between gap-4 px-6 py-4 items-center bg-slate-900 h-32 text-2xl  sticky top-0 z-50 shadow-md'>
       <div className='ml-4'>
@@ -18,7 +20,9 @@ const Navbar = () => {
       </button>
       
       </div>
-      
+      <button className='hover:bg-slate-300 hover:text-blue-500 border border-blue-600 border bg-blue-500 rounded-full p-2  text-white'>
+        Put Data
+      </button>
     </div>
   )
 }
