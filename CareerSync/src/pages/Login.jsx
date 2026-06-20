@@ -1,13 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {getAuth,signInWithEmailAndPassword} from 'firebase/auth'
-import {app} from '../services/firebase'
+import { useAuth } from '../context/AuthContext'
+
 
 const Login = () => {
- const auth=getAuth(app)
-
- 
+  const {login}=useAuth();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -15,7 +13,7 @@ const Login = () => {
     e.preventDefault()
     console.log("Email:", email)
     console.log("Password:", password)
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    login(email,password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       alert(`User logged in: ${user.email}`);

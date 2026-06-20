@@ -1,26 +1,28 @@
 import React from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {getAuth,createUserWithEmailAndPassword} from 'firebase/auth'
-import {app} from '../services/firebase'
+import {useAuth} from '../context/AuthContext'
+
 
 const Signup = () => {
+  const {signup}=useAuth()
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [name,setName]=useState("");
-    
-  const createuser=(email,password)=>{
-    const auth=getAuth(app)
-    createUserWithEmailAndPassword(auth,email,password).then((value)=>{
-      alert(`User created: ${name}`);
-    });
-  }
+ 
+  
   const handleSubmit=(e)=>{
     e.preventDefault()
     console.log("Name:",name)
     console.log("Email:", email)
     console.log("Password:", password)
-    createuser(email,password)
+    signup(email,password).then((value)=>{
+      alert(`User created: ${name}`);
+    }).catch((error)=>{
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(`Error: ${errorMessage}`);
+    });
   }
   return (
     <div className='flex flex-col justify-center items-center h-[500px]  bg-slate-900 w-100 m-auto border-2 border-gray-300 rounded-lg shadow-xl shadow-slate-500 text-slate-100 my-25'>

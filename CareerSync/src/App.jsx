@@ -5,11 +5,13 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Layout from './components/Layout'
 import Notfound from './pages/Notfound'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
     <BrowserRouter>
-    <Layout>
+    <AuthProvider>
+      <Layout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
@@ -18,6 +20,8 @@ function App() {
       </Routes>
      
     </Layout>
+    </AuthProvider>
+    
     </BrowserRouter>
   )
 }
