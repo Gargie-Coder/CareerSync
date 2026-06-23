@@ -6,6 +6,8 @@ import Signup from './pages/Signup'
 import Layout from './components/Layout'
 import Notfound from './pages/Notfound'
 import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import PublicRoute from './components/PublicRoute'
 
 function App() {
   return (
@@ -13,9 +15,12 @@ function App() {
     <AuthProvider>
       <Layout>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={
+          <ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/login" element=
+        {<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/signup" element={
+          <PublicRoute><Signup /></PublicRoute>} />
          <Route path="*" element={<Notfound />} />
       </Routes>
      

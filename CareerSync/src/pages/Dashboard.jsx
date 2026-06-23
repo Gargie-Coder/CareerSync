@@ -7,7 +7,7 @@ const Dashboard = () => {
   return (
     <div className='w-full min-h-screen bg-slate-700 p-6 pt-12'>
       <h1 className='text-cyan-300 text-left font-bold text-3xl'>DashBoard</h1>
-      <span className='text-blue-100 text-lg italic font-serif'>Welcome,gargie</span>
+      <span className='text-blue-100 text-lg italic font-serif'>Welcome,{user.email}</span>
       <div className='pt-4 p-4 bg-gray-800 flex flex-wrap gap-4'>
       {applications.map((app) => (
 

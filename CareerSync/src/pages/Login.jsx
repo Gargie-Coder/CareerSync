@@ -2,9 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
+  const {navigate}=useNavigate()
   const {login}=useAuth();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -16,7 +18,9 @@ const Login = () => {
     login(email,password).then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      alert(`User logged in: ${user.email}`);
+      alert(`User logged in: ${user.email}`)
+      
+      
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
