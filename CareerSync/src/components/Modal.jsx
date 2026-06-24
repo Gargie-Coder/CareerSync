@@ -1,19 +1,65 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const Modal = ({isOpen,onClose}) => {
-  return (<>
-    {!isOpen?(null):(
-    <div className='fixed inset-0 backdrop-blur-sm bg-black/50 flex justify-center items-center' onClick={onClose}>
-     
-      <div className='bg-amber-100 w-[600px] text-black p-2 flex flex-col justify-center items-center' onClick={(e)=>e.stopPropagation()}>//this is used to stop the bubbling effect caused by the onclose on the outer div and prevent the form to close while click inside the form
-         <button className='text-bold text-red-500 text-2xl place-self-end' onClick={()=>{
-          onClose()
-         }}>X</button>
-        <h1 className='text-center'>Modal</h1>
-      <p>Modal form will appear here and user will fill the information reagerding there application</p>  
+const Modal = ({ isOpen, onClose }) => {
+  
+  return (
+    <>
+      {!isOpen ? null : (
+        <div className='fixed inset-0 backdrop-blur-sm bg-black/50 flex justify-center items-center' onClick={onClose}>
+          <div className='bg-amber-100 w-[600px] text-black p-6 flex flex-col justify-center items-center rounded-xl' onClick={(e) => e.stopPropagation()}>
+            
+            <button className='font-bold text-red-500 text-2xl place-self-end mb-2' onClick={onClose}>X</button>
+            
+            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4 w-full">
+              <h1 className='text-3xl font-bold text-blue-800 pb-4 text-start'>Apply Now and Track later</h1>
+              {/* Row 1: Company Name & Role Title */}
+              <div className="flex gap-4 w-full">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Google" />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Role Title</label>
+                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Software Engineer" />
+                </div>
+              </div>
+
+              {/* Row 2: Location & Salary-Range */}
+              <div className="flex gap-4 w-full">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. San Francisco" />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Salary-Range</label>
+                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Rs.50000-Rs.100000" />
+                </div>
+              </div>
+
+              {/* Row 3: Applied Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Applied Date</label>
+                <input type="date" className="w-full border border-gray-300 rounded-lg p-2" />
+              </div>
+
+              {/* Row 4: Notes / Textarea */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea 
+                  rows="4" 
+                  className="w-full p-2 border border-gray-300 rounded-lg" 
+                  placeholder="Type your long message here... (Enter creates a new line)">
+                </textarea>
+              </div>
+
+              <button type="submit" className="bg-blue-600 text-white py-2 rounded-lg mt-2 font-medium hover:bg-blue-700 transition-colors">
+                Save Application
+              </button>
+            </form>
+           
+          </div>
         </div>
-    </div>)
-    }
+      )}
     </>
   )
 }
