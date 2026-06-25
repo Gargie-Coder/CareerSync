@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Modal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    company: "",
+    role: "",
+    location: "",
+    salary: "",
+    date: "",
+    notes: "",
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
   
   return (
     <>
@@ -12,15 +24,30 @@ const Modal = ({ isOpen, onClose }) => {
             
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4 w-full">
               <h1 className='text-3xl font-bold text-blue-800 pb-4 text-start'>Apply Now and Track later</h1>
+              
               {/* Row 1: Company Name & Role Title */}
               <div className="flex gap-4 w-full">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Google" />
+                  <input 
+                    type="text" 
+                    name="company" 
+                    value={formData.company} 
+                    onChange={handleChange} 
+                    className="w-full border border-gray-300 rounded-lg p-2" 
+                    placeholder="e.g. Google" 
+                  />
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Role Title</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Software Engineer" />
+                  <input 
+                    type="text" 
+                    name="role" 
+                    value={formData.role} 
+                    onChange={handleChange} 
+                    className="w-full border border-gray-300 rounded-lg p-2" 
+                    placeholder="e.g. Software Engineer" 
+                  />
                 </div>
               </div>
 
@@ -28,24 +55,47 @@ const Modal = ({ isOpen, onClose }) => {
               <div className="flex gap-4 w-full">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. San Francisco" />
+                  <input 
+                    type="text" 
+                    name="location" 
+                    value={formData.location} 
+                    onChange={handleChange} 
+                    className="w-full border border-gray-300 rounded-lg p-2" 
+                    placeholder="e.g. San Francisco" 
+                  />
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Salary-Range</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-lg p-2" placeholder="e.g. Rs.50000-Rs.100000" />
+                  <input 
+                    type="text" 
+                    name="salary" 
+                    value={formData.salary} 
+                    onChange={handleChange} 
+                    className="w-full border border-gray-300 rounded-lg p-2" 
+                    placeholder="e.g. Rs.50000-Rs.100000" 
+                  />
                 </div>
               </div>
 
               {/* Row 3: Applied Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Applied Date</label>
-                <input type="date" className="w-full border border-gray-300 rounded-lg p-2" />
+                <input 
+                  type="date" 
+                  name="date" 
+                  value={formData.date} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg p-2" 
+                />
               </div>
 
               {/* Row 4: Notes / Textarea */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
                 <textarea 
+                  name="notes" 
+                  value={formData.notes} 
+                  onChange={handleChange}
                   rows="4" 
                   className="w-full p-2 border border-gray-300 rounded-lg" 
                   placeholder="Type your long message here... (Enter creates a new line)">
