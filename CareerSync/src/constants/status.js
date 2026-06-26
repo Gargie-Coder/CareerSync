@@ -1,4 +1,4 @@
-export const statusLabels=[
+export const STATUS_LABELS=[
     "Applied",
     "Phone Screen",
     "Technical Interview",

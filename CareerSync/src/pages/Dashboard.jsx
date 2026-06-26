@@ -8,8 +8,11 @@ import Modal from '../components/Modal'
 const Dashboard = () => {
   const {user}=useAuth()
   const [isModalOpen,setModal]=useState(false)
-
   const[applications,setApplication]=useState(initialdata)
+  const onaddApplication=(newApp)=>{
+      const appWithId = { ...newApp, id: Date.now()}
+      setApplication([...applications, appWithId])
+  }
     return (
       <Fragment>
     <div className='w-full min-h-screen bg-slate-700 p-6 pt-12'>
@@ -20,7 +23,7 @@ const Dashboard = () => {
         }}>
          <CgAdd className="text-5xl"/>Add Application
         </button>
-      <Modal isOpen={isModalOpen} onClose={()=>setModal(false)}/>
+     <Modal isOpen={isModalOpen} onClose={() => setModal(false)} onAddApplication={onaddApplication} />
          
       <div className='pt-4 p-4 bg-gray-800 flex flex-wrap gap-4'>
       {applications.map((app) => (

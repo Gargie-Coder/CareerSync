@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-
-const Modal = ({ isOpen, onClose }) => {
+import {STATUS_LABELS} from '../constants/status'
+const Modal = ({ isOpen, onClose,onAddApplication }) => {
   const [formData, setFormData] = useState({
     company: "",
     role: "",
@@ -8,10 +8,27 @@ const Modal = ({ isOpen, onClose }) => {
     salary: "",
     date: "",
     notes: "",
+    status:""
   })
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+   
+  }
+
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+   onAddApplication(formData)
+   setFormData({
+    company: "",
+    role: "",
+    location: "",
+    salary: "",
+    date: "",
+    notes: "",
+    status: "",
+  })
+  onClose()
   }
   
   return (
@@ -22,7 +39,7 @@ const Modal = ({ isOpen, onClose }) => {
             
             <button className='font-bold text-red-500 text-2xl place-self-end mb-2' onClick={onClose}>X</button>
             
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4 w-full">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
               <h1 className='text-3xl font-bold text-blue-800 pb-4 text-start'>Apply Now and Track later</h1>
               
               {/* Row 1: Company Name & Role Title */}
@@ -75,6 +92,21 @@ const Modal = ({ isOpen, onClose }) => {
                     placeholder="e.g. Rs.50000-Rs.100000" 
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select 
+                  name="status" 
+                  value={formData.status} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                >
+                  <option value="">Select status</option>
+                  {STATUS_LABELS.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Row 3: Applied Date */}
