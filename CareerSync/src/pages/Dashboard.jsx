@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState ,useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import  initialdata  from '../utils/data'
+import { addApplication,subscribeToApplications} from '../services/addApplications'
 import {CgAdd} from "react-icons/cg"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
@@ -8,11 +8,26 @@ import Modal from '../components/Modal'
 const Dashboard = () => {
   const {user}=useAuth()
   const [isModalOpen,setModal]=useState(false)
-  const[applications,setApplication]=useState(initialdata)
-  const onaddApplication=(newApp)=>{
-      const appWithId = { ...newApp, id: Date.now()}
-      setApplication([...applications, appWithId])
+  // Start with an empty array; Firebase will supply the initial data immediately on mount
+  const[applications,setApplication]=useState([])
+
+  // Action: Triggered when the Modal form submits a new job application
+  const handleAddApplication = async (newApp) => {
+    try {
+      // 1. Push directly to Firebase. Do NOT manually update local state here!
+      await addApplication(user.uid, newApp)
+    } catch (error) {
+      console.error("Error saving application:", error)
+    }
   }
+  // Effect: Sets up the real-time database listener on component mount
+   useEffect(()=>{
+      if(!user?.uid)return
+      const unsubscribe=subscribeToApplications(user.uid,setApplication)
+      return ()=>unsubscribe
+  },[user?.uid])
+
+
     return (
       <Fragment>
     <div className='w-full min-h-screen bg-slate-700 p-6 pt-12'>
@@ -23,7 +38,7 @@ const Dashboard = () => {
         }}>
          <CgAdd className="text-5xl"/>Add Application
         </button>
-     <Modal isOpen={isModalOpen} onClose={() => setModal(false)} onAddApplication={onaddApplication} />
+     <Modal isOpen={isModalOpen} onClose={() => setModal(false)} onAddApplication={handleAddApplication} />
          
       <div className='pt-4 p-4 bg-gray-800 flex flex-wrap gap-4'>
       {applications.map((app) => (

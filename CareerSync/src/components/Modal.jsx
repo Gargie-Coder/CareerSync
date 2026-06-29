@@ -16,10 +16,10 @@ const Modal = ({ isOpen, onClose,onAddApplication }) => {
    
   }
 
-  const handleSubmit=(e)=>{
-    e.preventDefault()
-   onAddApplication(formData)
-   setFormData({
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  await onAddApplication(formData)
+  setFormData({
     company: "",
     role: "",
     location: "",
@@ -29,7 +29,7 @@ const Modal = ({ isOpen, onClose,onAddApplication }) => {
     status: "",
   })
   onClose()
-  }
+}
   
   return (
     <>
