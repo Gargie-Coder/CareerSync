@@ -49,8 +49,12 @@ const Dashboard = () => {
      <Modal isOpen={isModalOpen} onClose={() => setModal(false)} onAddApplication={handleAddApplication} />
          
       <div className='pt-4 p-4 bg-gray-800 flex flex-wrap gap-4'>
-      {applications.map((app) => (
-
+      {applications.length===0?
+      <p className="text-gray-400 text-center w-full mt-8">
+        No applications yet — add your first one!
+      </p>
+        
+      :applications.map((app) => (
            <div key={app.id} className=' card h-50 w-50 bg-gray-100 border rounded-lg transform transition duration-300 ease-in-out hover:scale-105 p-4 rounded shadow-cyan-300 shadow-md'>
          <h3 className='text-blue-800 text-2xl text-center font-bold'>{app.company}</h3> 
          <p className='text-gray-800 text-center pb-4'>{app.role}</p>
