@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [isModalOpen,setModal]=useState(false)
   // Start with an empty array; Firebase will supply the initial data immediately on mount
   const[applications,setApplication]=useState([])
+  const[isLoading,setLoading]=useState(true);//default is true since when the page loads it will not have the data
 
   // Action: Triggered when the Modal form submits a new job application
   const handleAddApplication = async (newApp) => {
@@ -23,12 +24,19 @@ const Dashboard = () => {
   // Effect: Sets up the real-time database listener on component mount
    useEffect(()=>{
       if(!user?.uid)return
-      const unsubscribe=subscribeToApplications(user.uid,setApplication)
+      const unsubscribe=subscribeToApplications(user.uid,(data) => {
+  setApplication(data)
+ setLoading(false)
+})
       return ()=>unsubscribe
   },[user?.uid])
 
 
     return (
+      <>
+      {isLoading? <div className="flex items-center justify-center min-h-screen">
+      <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>:
       <Fragment>
     <div className='w-full min-h-screen bg-slate-700 p-6 pt-12'>
       <h1 className='text-cyan-300 text-left font-bold text-3xl'>DashBoard</h1>
@@ -56,6 +64,9 @@ const Dashboard = () => {
         </div>
      
     </Fragment>
+}
+      
+    </>
   )
 }
 
