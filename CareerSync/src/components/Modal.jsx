@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import {STATUS_LABELS} from '../constants/status'
-const Modal = ({ isOpen, onClose,onAddApplication }) => {
+const Modal = ({ isOpen, onClose,onAddApplication,
+  editingApp,onUpdateApplication
+ }) => {
   const [formData, setFormData] = useState({
     company: "",
     role: "",
@@ -10,34 +12,63 @@ const Modal = ({ isOpen, onClose,onAddApplication }) => {
     notes: "",
     status:""
   })
-
+ 
+  useEffect(() => {
+  if (editingApp) {
+    setFormData({
+      company: editingApp.company,
+      role: editingApp.role,
+      location: editingApp.location,
+      salary: editingApp.salary,
+      date: editingApp.date,
+      notes: editingApp.notes,
+      status: editingApp.status,
+    })
+  } else {
+    setFormData({
+      company: "",
+      role: "",
+      location: "",
+      salary: "",
+      date: "",
+      notes: "",
+      status: "",
+    })
+  }
+}, [editingApp])
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
    
   }
 
- const handleSubmit = async (e) => {
-  e.preventDefault()
-  await onAddApplication(formData)
-  setFormData({
-    company: "",
-    role: "",
-    location: "",
-    salary: "",
-    date: "",
-    notes: "",
-    status: "",
-  })
-  onClose()
-}
+  const handleSubmit = async (e) => {
+   e.preventDefault()// Prevent the default form submission behavior
+   if (editingApp) {
+     await onUpdateApplication(editingApp.id, formData)
+   } else {
+     await onAddApplication(formData)
+   } 
+   setFormData({
+     company: "",
+     role: "",
+     location: "",
+     salary: "",
+     date: "",
+     notes: "",
+     status: "",
+   })// Reset form data after submission
+   onClose()
+ }
   
   return (
     <>
       {!isOpen ? null : (
-        <div className='fixed inset-0 backdrop-blur-sm bg-black/50 flex justify-center items-center' onClick={onClose}>
-          <div className='bg-amber-100 w-[600px] text-black p-6 flex flex-col justify-center items-center rounded-xl' onClick={(e) => e.stopPropagation()}>
+        <div className='fixed inset-0 backdrop-blur-sm bg-black/50 flex justify-center items-center z-50' onClick={onClose}>
+          <div className=' bg-amber-50 w-[600px]  text-black p-6 flex flex-col justify-center items-center rounded-xl' onClick={(e) => e.stopPropagation()}>
             
-            <button className='font-bold text-red-500 text-2xl place-self-end mb-2' onClick={onClose}>X</button>
+            <button className='font-bold text-red-500 text-2xl place-self-end mb-2' onClick={() => {
+              onClose()
+            }}>X</button>
             
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
               <h1 className='text-3xl font-bold text-blue-800 pb-4 text-start'>Apply Now and Track later</h1>

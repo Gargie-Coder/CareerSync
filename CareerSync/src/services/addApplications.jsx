@@ -1,4 +1,4 @@
-import { ref, push, set, onValue } from "firebase/database"
+import { ref, push, set, onValue,update } from "firebase/database"
 import { db } from "./firebase"
 
 /**
@@ -27,6 +27,11 @@ export const addApplication = (uid, applicationData) => {
   
   // 3. Write the application form payload into that brand-new unique ID slot.
   return set(newApplicationRef, applicationData)
+}
+
+export const updateApplication = (uid, appId, updatedData) => {
+  const applicationRef = ref(db, `applications/${uid}/${appId}`)
+  return update(applicationRef, updatedData)
 }
 
 /**

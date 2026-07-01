@@ -1,9 +1,10 @@
 import React, { Fragment, useState ,useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { addApplication,subscribeToApplications} from '../services/addApplications'
+import { addApplication,subscribeToApplications,updateApplication} from '../services/addApplications'
 import {CgAdd} from "react-icons/cg"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
+
 
 const Dashboard = () => {
   const {user}=useAuth()
@@ -11,6 +12,7 @@ const Dashboard = () => {
   // Start with an empty array; Firebase will supply the initial data immediately on mount
   const[applications,setApplication]=useState([])
   const[isLoading,setLoading]=useState(true);//default is true since when the page loads it will not have the data
+  const [editingApp, setEditingApp] = useState(null)
 
   // Action: Triggered when the Modal form submits a new job application
   const handleAddApplication = async (newApp) => {
@@ -21,6 +23,14 @@ const Dashboard = () => {
       console.error("Error saving application:", error)
     }
   }
+  const handleUpdateApplication = async (appId, updatedData) => {
+    try {
+      await updateApplication(user.uid, appId, updatedData)
+    } catch (error) {
+      console.error("Error updating application:", error)
+    }
+  }
+
   // Effect: Sets up the real-time database listener on component mount
    useEffect(()=>{
       if(!user?.uid)return
@@ -48,7 +58,7 @@ const Dashboard = () => {
          <CgAdd className="text-5xl"/>Add Application
         </button>
       </div>
-       <Modal isOpen={isModalOpen} onClose={() => setModal(false)} onAddApplication={handleAddApplication} />
+       <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication} editingApp={editingApp}/>
          
       <div className='pt-4 p-4 bg-gray-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
       {applications.length===0?
@@ -63,6 +73,14 @@ const Dashboard = () => {
          <p className='text-blue-500'>Date Applied: <span className='text-blue-900'>{app.date}</span></p>
          <p className='text-blue-500'>
           <span className='text-blue-900'>Status: {app.status}</span></p>
+          <button className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600' onClick={() => {
+            setEditingApp(app)
+            setModal(true)
+          }}>
+            Edit
+          </button>
+          
+        
         </div>
       
       ))}
