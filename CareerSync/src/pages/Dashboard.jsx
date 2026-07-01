@@ -66,7 +66,7 @@ const Dashboard = () => {
          <CgAdd className="text-5xl"/>Add Application
         </button>
       </div>
-       <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication} onDeleteApplication={handleDeleteApplication} editingApp={editingApp}/>
+       <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
       <div className='pt-4 p-4 bg-gray-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
       {applications.length===0?

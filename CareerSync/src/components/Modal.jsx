@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import {STATUS_LABELS} from '../constants/status'
 const Modal = ({ isOpen, onClose,onAddApplication,
-  editingApp,onUpdateApplication,onDeleteApplication
+  editingApp,onUpdateApplication
  }) => {
   const [formData, setFormData] = useState({
     company: "",
