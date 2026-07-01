@@ -1,4 +1,4 @@
-import { ref, push, set, onValue,update } from "firebase/database"
+import { ref, push, set, onValue,update,remove } from "firebase/database"
 import { db } from "./firebase"
 
 /**
@@ -32,6 +32,11 @@ export const addApplication = (uid, applicationData) => {
 export const updateApplication = (uid, appId, updatedData) => {
   const applicationRef = ref(db, `applications/${uid}/${appId}`)
   return update(applicationRef, updatedData)
+}
+
+export const deleteApplication=(uid,appId)=>{
+  const applicationRef=ref(db,`applications/${uid}/${appId}`)
+  return remove(applicationRef)
 }
 
 /**
