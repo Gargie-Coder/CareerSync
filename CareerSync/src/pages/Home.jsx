@@ -1,9 +1,10 @@
 import React from 'react'
+import features from '../constants/features'
 
 export const Home = () => {
   return (
     <>
-    <section><div className='flex flex-col gap-4 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10' >
+    <section className="mb-20"><div className='flex flex-col  gap-4 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10' >
         <div>
           <p className='text-4xl font-bold text-white m-4'>Welcome to CareerSync</p>
           <p className=' text-gray-300 bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent border-2 rounded-3xl backdrop-brightness-150 m-4 p-2 text-3xl w-fit'>Track Less. Land More.</p>
@@ -23,7 +24,15 @@ export const Home = () => {
         </div>
       </div>
     </section>
-    <section>
+    <section className="flex justify-around *:flex-wrap gap-4 mb-20 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10 text-2xl">
+
+      {features.map((feature, index) => (
+        <div key={feature.title} className="bg-white/10 w-fit border border-white/20 rounded-lg p-4 ">
+        {/*title is used as a key because even if the items are rearranged, the title will remain the same and can be used to identify the item uniquelywhile if we use index as a key, it will change if the items are rearranged and can cause issues with rendering and performance. */}
+          <span className="font-bold block">{feature.title}</span>
+          <p>{feature.description}</p>
+        </div>
+      ))}
       
     </section>
     </>
