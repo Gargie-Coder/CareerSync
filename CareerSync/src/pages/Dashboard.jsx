@@ -56,7 +56,7 @@ const Dashboard = () => {
       <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
     </div>:
       <Fragment>
-    <div className='w-full p-6 pt-12'>
+    <div className='w-full p-6 pt-12 '>
       <div className=' flex justify-between items-center mb-6'>
         <h1 className='text-cyan-300 text-left font-bold text-3xl'>DashBoard</h1>
       <span className='text-blue-100 text-lg italic font-serif'>Welcome,{user.email}</span>
@@ -68,14 +68,14 @@ const Dashboard = () => {
       </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
-      <div className='pt-4 p-4 bg-gray-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <div className='pt-4 p-4 bg-slate-900 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
       {applications.length===0?
       <p className="text-gray-400 text-center w-full mt-8">
         No applications yet — add your first one!
       </p>
         
       :applications.map((app) => (
-           <div key={app.id} className=' card  bg-gray-100 border rounded-lg transform transition duration-300 ease-in-out hover:scale-105 p-4 rounded shadow-cyan-300 shadow-md'>
+           <div key={app.id} className=' card  bg-gray-100 border rounded-r-4xl transform transition duration-300 ease-in-out hover:scale-105 p-4  shadow-cyan-300 shadow-lg'>
          <h3 className='text-blue-800 text-2xl text-center font-bold'>{app.company}</h3> 
          <p className='text-gray-800 text-center pb-4'>{app.role}</p>
          <p className='text-blue-500'>Date Applied: <span className='text-blue-900'>{app.date}</span></p>

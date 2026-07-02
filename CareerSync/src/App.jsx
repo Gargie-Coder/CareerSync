@@ -8,6 +8,7 @@ import Notfound from './pages/Notfound'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
+import { Home } from './pages/Home'
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
       <Layout>
       <Routes>
         <Route path="/" element={
+         <Home />} />
+        <Route path="/dashboard" element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/login" element=
         {<PublicRoute><Login /></PublicRoute>} />
