@@ -2,8 +2,10 @@ import React, { Fragment, useState ,useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { addApplication,subscribeToApplications,updateApplication,deleteApplication} from '../services/addApplications'
 import {CgAdd} from "react-icons/cg"
+import {AiOutlineSearch} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
+
 
 
 const Dashboard = () => {
@@ -13,6 +15,7 @@ const Dashboard = () => {
   const[applications,setApplication]=useState([])
   const[isLoading,setLoading]=useState(true);//default is true since when the page loads it will not have the data
   const [editingApp, setEditingApp] = useState(null)
+ 
 
   // Action: Triggered when the Modal form submits a new job application
   const handleAddApplication = async (newApp) => {
@@ -64,7 +67,13 @@ const Dashboard = () => {
           console.log(isModalOpen)
         }}>
          <CgAdd className="text-5xl"/>Add Application
-        </button>
+        </button>  
+                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-blue-400 text-white hover:bg-red-500 ">
+                    <AiOutlineSearch className="text-2xl mr-2"/>
+                    <input type='text' className="bg-blue-400 text-white placeholder-gray-100 outline-none text-2xl flex-1" placeholder="Search applications..."/>
+                  </div>
+        
+                   
       </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
