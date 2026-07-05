@@ -5,7 +5,7 @@ import {CgAdd, CgFilters} from "react-icons/cg"
 import {AiOutlineSearch} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
-import { STATUS_LABELS } from '../constants/status'
+import { STATUS_LABELS,STATUS_COLORS } from '../constants/status'
 
 
 
@@ -79,15 +79,15 @@ const Dashboard = () => {
         }}>
          <CgAdd className="text-xl"/>Add Application
         </button>  
-                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-blue-400 text-white hover:bg-blue-500
+                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-gray-600 text-white hover:bg-gray-500
 focus-within:ring-2 focus-within:ring-blue-300">
                     <AiOutlineSearch className="text-2xl mr-2"/>
-                    <input type='text' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} className="bg-blue-400 text-white placeholder-gray-100 outline-none text-2xl flex-1" placeholder="Search applications..."/>
+                    <input type='text' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} className="bg-gray-600 text-white placeholder-gray-100 outline-none text-xl flex-1" placeholder="Search applications..."/>
                   </div>
-                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-blue-400 text-white hover:bg-blue-500
+                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-slate-600 text-white hover:bg-slate-500
 focus-within:ring-2 focus-within:ring-blue-300">
                     <CgFilters className="text-2xl mr-2"/>
-                    <select className="bg-blue-400 text-white placeholder-gray-100 outline-none text-2xl flex-1 border-2 rounded-2xl" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+                    <select className="bg-gray-600 text-white placeholder-gray-100 outline-none text-xl flex-1" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
                       <option value="">Sort by Status</option>
                       {STATUS_LABELS.map((status) => (
                         <option key={status} value={status}>{status}</option>
@@ -118,7 +118,7 @@ focus-within:ring-2 focus-within:ring-blue-300">
          <p className='text-gray-800 text-center pb-4'>{app.role}</p>
          <p className='text-blue-500 mb-4'>Date Applied: <span className='text-blue-900'>{app.date}</span></p>
         
-          <span className="font-semibold rounded-full bg-blue-100 text-blue-700 text-sm px-3 py-1.5 mr-2 mb-2">
+          <span className={`font-semibold rounded-full ${STATUS_COLORS[app.status]}  text-sm px-3 py-1.5 mr-2 mb-2`}>
             {app.status}
           </span>
        
