@@ -66,15 +66,17 @@ const Dashboard = () => {
     </div>:
       <Fragment>
     <div className='w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] pl-15 pr-15'>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <div className="pb-10">
           <h1 className='text-amber-100 text-left font-bold text-4xl pb-2'>Welcome✨</h1>
           <span className='text-blue-100 text-lg italic font-serif pl-2'>{user.email}</span>
+          <hr class="border-t border-slate-500 m-4" />
         </div>
+        
       <div className=' flex justify-between items-center mb-6'>
        
         
-        <button  className="flex items-center gap-2 px-5 py-3 rounded-xl border border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition" onClick={()=>{setModal(true)
+        <button  className="flex items-center gap-2 px-5 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition" onClick={()=>{setModal(true)
           console.log(isModalOpen)
         }}>
          <CgAdd className="text-xl"/>Add Application
@@ -99,7 +101,7 @@ focus-within:ring-2 focus-within:ring-blue-300">
       </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
-      <div className='pt-4 p-4 bg-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+      <div className='pt-4 p-4  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         
         
         {applications.length===0?
@@ -113,23 +115,24 @@ focus-within:ring-2 focus-within:ring-blue-300">
       </p>
         
       :filteredApplications.map((app) => (
-           <div key={app.id} className=' card  bg-gray-100 border rounded-r-4xl transform transition duration-300 ease-in-out hover:scale-105 p-4  shadow-cyan-300 shadow-lg'>
-         <h3 className='text-blue-800 text-2xl text-center font-bold'>{app.company}</h3> 
-         <p className='text-gray-800 text-center pb-4'>{app.role}</p>
-         <p className='text-blue-500 mb-4'>Date Applied: <span className='text-blue-900'>{app.date}</span></p>
-        
-          <span className={`font-semibold rounded-full ${STATUS_COLORS[app.status]}  text-sm px-3 py-1.5 mr-2 mb-2`}>
+           <div key={app.id} className=' card  bg-slate-800 border rounded-r-4xl transform transition duration-300 ease-in-out hover:scale-105 p-4  shadow-gray-300 shadow-md hover:shadow-lg'>
+            <span className={`font-semibold rounded-full ${STATUS_COLORS[app.status]} px-3 py-1.5 mr-8  mb-2 flex items-center justify-center w-fit`}>
             {app.status}
           </span>
+         <h3 className='text-amber-50 text-4xl text-center font-bold font-serif'>{app.company}</h3> 
+         <p className='text-gray-100 text-center text-2xl p-4'>{app.role}</p>
+         <p className='text-blue-300 mb-4 text-xl'>Date Applied: <span className='text-blue-100'>{app.date}</span></p>
+        
+          
        
          <div className="mt-5 flex gap-2">
-          <button className='bg-blue-500 text-white py-2 px-4 m-2 rounded hover:bg-blue-600' onClick={() => {
+          <button className=' text-white py-2 px-4 m-2 bg-white/20 border-white/30 hover:underline-offset hover:bg-blue-400 hover:border rounded-2xl' onClick={() => {
             setEditingApp(app)
             setModal(true)
           }}>
             Edit
           </button>
-        <button className='bg-red-500 text-white py-2 px-4 m-2 rounded hover:bg-red-600' onClick={() => {
+        <button className=' text-white py-2 px-4 m-2 bg-white/20 border border-white/30 hover:underline hover:border rounded-2xl hover:bg-red-600' onClick={() => {
           const confirmed = window.confirm(`Delete application for ${app.company}? This cannot be undone.`)
           if (confirmed) {
             handleDeleteApplication(app.id)
