@@ -9,17 +9,22 @@ import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 import { Home } from './pages/Home'
+import Analytics from './pages/Analytics'
+import { ApplicationProvider } from './context/ApplicationContext'
 
 function App() {
   return (
     <BrowserRouter>
+    <ApplicationProvider>
     <AuthProvider>
       <Layout>
       <Routes>
         <Route path="/" element={
          <Home />} />
         <Route path="/dashboard" element={
-          <ProtectedRoute><Dashboard /></ProtectedRoute>} />
+  <ProtectedRoute><Dashboard /></ProtectedRoute>} />
+<Route path="/analytics" element={
+  <ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/login" element=
         {<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={
@@ -29,7 +34,7 @@ function App() {
      
     </Layout>
     </AuthProvider>
-    
+    </ApplicationProvider>
     </BrowserRouter>
   )
 }
