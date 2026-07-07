@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 const Navbar = () => {
   const {user,logout}=useAuth()
   return (
-    <div className='max-w-10xl flex flex-wrap justify-between gap-4 px-6 py-4 items-center bg-blue/60 backdrop-blur-md h-32 text-2xl sticky top-0 z-50 shadow-md'>
+    <div className='max-w-10xl flex flex-wrap justify-between gap-4 px-6 py-4 items-center bg-blue/60 backdrop-blur-md  text-2xl sticky top-0 z-50 shadow-white/20 shadow-2xl'>
       <div className='ml-4'>
         <Link to ={"/"} className='bg-gray-100 text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent'>
       CareerSync

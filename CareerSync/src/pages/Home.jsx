@@ -9,9 +9,9 @@ export const Home = () => {
           <p className='text-4xl font-bold text-white m-4'>Welcome to CareerSync</p>
           <p className=' text-gray-300 bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent border-2 rounded-3xl backdrop-brightness-150 m-4 p-2 text-3xl w-fit'>Track Less. Land More.</p>
         </div>
-        <div className='flex flex-col gap-2 text-white m-4'>
-        <h1 className='text-9xl font-extrabold tracking-tight '>Your Job Search,</h1>
-        <h1 className='text-9xl font-extrabold tracking-tight '>finally <span className='bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent mb-4'>Organized.</span></h1>
+        <div className='flex flex-col gap-2 text-white m-4 text-4xl sm:text-6xl md:text-8xl lg:text-9xl'>
+        <h1 className='font-extrabold tracking-tight '>Your Job Search,</h1>
+        <h1 className='font-extrabold tracking-tight '>finally <span className='bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent mb-4'>Organized.</span></h1>
         <p className='text-2xl text-gray-300 p-2 m-4 gap-4 leading-loose'>
           CareerSync is a calm, focused tracker for every application you send. No spreadsheets, no noise — just the clarity you need to land your next role.
         </p>
@@ -24,7 +24,7 @@ export const Home = () => {
         </div>
       </div>
     </section>
-    <section className="flex justify-around *:flex-wrap gap-4 mb-20 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10 text-2xl">
+    <section className="flex justify-around gap-4 mb-20 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10 text-2xl">
 
       {features.map((feature, index) => (
         <div key={feature.title} className="bg-white/10 w-fit border border-white/20 rounded-lg p-4 ">

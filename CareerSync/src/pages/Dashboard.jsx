@@ -73,7 +73,7 @@ const Dashboard = () => {
           <hr class="border-t border-slate-500 m-4" />
         </div>
         
-      <div className=' flex justify-between items-center mb-6'>
+      <div className=' flex justify-between items-center mb-6 flex-inline gap-4 flex-wrap'>
        
         
         <button  className="flex items-center gap-2 px-5 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition" onClick={()=>{setModal(true)
