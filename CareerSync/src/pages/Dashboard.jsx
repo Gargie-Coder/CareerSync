@@ -6,6 +6,7 @@ import {AiOutlineSearch} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
 import { STATUS_LABELS,STATUS_COLORS } from '../constants/status'
+import { useApplications } from '../context/ApplicationContext'
 
 
 
@@ -13,13 +14,12 @@ const Dashboard = () => {
   const {user}=useAuth()
   const [isModalOpen,setModal]=useState(false)
   // Start with an empty array; Firebase will supply the initial data immediately on mount
-  const[applications,setApplication]=useState([])
-  const[isLoading,setLoading]=useState(true);//default is true since when the page loads it will not have the data
+ //default is true since when the page loads it will not have the data
   const [editingApp, setEditingApp] = useState(null)
   const[searchQuery,setSearchQuery]=useState("")
   const [statusFilter, setStatusFilter] = useState("")
  
-
+const { applications, loading: isLoading } = useApplications()
   // Action: Triggered when the Modal form submits a new job application
   const handleAddApplication = async (newApp) => {
     try {
@@ -49,16 +49,7 @@ const Dashboard = () => {
   })//here we are filtering the applications based on the search query and status filter. If the status filter is empty, we include all statuses,because it is a ternary operator that checks if statusFilter is truthy. If it is, we check if the application's status matches the filter; if not, we include all applications regardless of their status.
 
   // Effect: Sets up the real-time database listener on component mount
-   useEffect(()=>{
-      if(!user?.uid)return
-      const unsubscribe=subscribeToApplications(user.uid,(data) => {
-  setApplication(data)
- setLoading(false)
-})
-      return ()=>unsubscribe
-  },[user?.uid])
-
-
+  
     return (
       <>
       {isLoading? <div className="flex items-center justify-center min-h-screen">

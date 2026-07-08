@@ -10,13 +10,13 @@ import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 import { Home } from './pages/Home'
 import Analytics from './pages/Analytics'
-import { ApplicationProvider } from './context/ApplicationContext'
+import { ApplicationsProvider } from './context/ApplicationContext'
 
 function App() {
   return (
     <BrowserRouter>
-    <ApplicationProvider>
-    <AuthProvider>
+     <AuthProvider>
+    <ApplicationsProvider>
       <Layout>
       <Routes>
         <Route path="/" element={
@@ -33,8 +33,9 @@ function App() {
       </Routes>
      
     </Layout>
+    </ApplicationsProvider>
     </AuthProvider>
-    </ApplicationProvider>
+    
     </BrowserRouter>
   )
 }
