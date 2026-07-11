@@ -58,38 +58,41 @@ const { applications, loading: isLoading } = useApplications()
       <Fragment>
     <div className='w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] pl-15 pr-15'>
       <div className="max-w-8xl mx-auto">
-        <div className="pb-10">
-          <h1 className='text-amber-100 text-left font-bold text-4xl pb-2'>Welcome✨</h1>
-          <span className='text-blue-100 text-lg italic font-serif pl-2'>{user.email}</span>
-          <hr class="border-t border-slate-500 m-4" />
-        </div>
+        <div className="pb-6 mb-6 border-b border-slate-800">
+  <h1 className='text-slate-50 text-left font-bold font-sans text-3xl tracking-tight'>Welcome back! {user.email}</h1>
+  <p className="text-sm text-slate-400 mt-1">Track, manage, and optimize your application pipeline.</p>
+</div>
         
-      <div className=' flex justify-between items-center mb-6 flex-inline gap-4 flex-wrap'>
+      <div className=' flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-8'>
        
         
-        <button  className="flex items-center gap-2 px-5 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-blue-600 transition" onClick={()=>{setModal(true)
+        <button  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-700 transition shadow-md shadow-blue-900/20" onClick={()=>{setModal(true)
           console.log(isModalOpen)
         }}>
          <CgAdd className="text-xl"/>Add Application
         </button>  
-                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-gray-600 text-white hover:bg-gray-500
-focus-within:ring-2 focus-within:ring-blue-300">
-                    <AiOutlineSearch className="text-2xl mr-2"/>
-                    <input type='text' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} className="bg-gray-600 text-white placeholder-gray-100 outline-none text-xl flex-1" placeholder="Search applications..."/>
+                  <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 max-w-2xl justify-end">
+                    <div className='flex items-center p-2.5 w-full sm:w-72 rounded-xl border border-slate-700 bg-slate-800 text-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition'>
+                    <AiOutlineSearch className="text-xl text-slate-400 mr-2 shrink-0"/>
+                    <input type='text' value={searchQuery} onChange={(e)=>{setSearchQuery(e.target.value)}} 
+    className="bg-transparent text-white placeholder-slate-400 outline-none text-sm w-full" 
+    placeholder="Search applications..." />
                   </div>
-                  <div className="flex items-center p-2  rounded-full text-center border-2 border-amber-100 bg-slate-600 text-white hover:bg-slate-500
-focus-within:ring-2 focus-within:ring-blue-300">
-                    <CgFilters className="text-2xl mr-2"/>
-                    <select className="bg-gray-600 text-white placeholder-gray-100 outline-none text-xl flex-1" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-                      <option value="">Sort by Status</option>
-                      {STATUS_LABELS.map((status) => (
-                        <option key={status} value={status}>{status}</option>
-                      ))}
-                    </select>
-                  </div>
-        
-                   
-      </div>
+                  <div className="flex items-center p-2.5  rounded-xl border border-slate-700 bg-slate-800 text-white focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition w-full sm:w-48">
+  <CgFilters className="text-xl text-slate-400 mr-2 shrink-0"/>
+  <select 
+    className="bg-transparent text-white text-sm outline-none w-full cursor-pointer appearance-none" 
+    onChange={(e) => setStatusFilter(e.target.value)} 
+    value={statusFilter}
+  >
+    <option value="" className="bg-slate-800">All Statuses</option>
+    {STATUS_LABELS.map((status) => (
+      <option key={status} value={status} className="bg-slate-800">{status}</option>
+    ))}
+  </select>
+</div>
+</div>
+</div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
       <div className='pt-4 p-4  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
@@ -106,24 +109,31 @@ focus-within:ring-2 focus-within:ring-blue-300">
       </p>
         
       :filteredApplications.map((app) => (
-           <div key={app.id} className=' card  bg-slate-800 border rounded-r-4xl transform transition duration-300 ease-in-out hover:scale-105 p-4  shadow-gray-300 shadow-md hover:shadow-lg'>
-            <span className={`font-semibold rounded-full ${STATUS_COLORS[app.status]} px-3 py-1.5 mr-8  mb-2 flex items-center justify-center w-fit`}>
-            {app.status}
-          </span>
-         <h3 className='text-amber-50 text-4xl text-center font-bold font-serif'>{app.company}</h3> 
-         <p className='text-gray-100 text-center text-2xl p-4'>{app.role}</p>
-         <p className='text-blue-300 mb-4 text-xl'>Date Applied: <span className='text-blue-100'>{app.date}</span></p>
-        
+           <div key={app.id} className=' card  bg-slate-800/80 border border-slate-700/50  transform transition duration-300 ease-in-out rounded-2xl hover:scale-105 p-5 shadow-black/30 shadow-lg flex flex-col justify-between'>
+            <div>
+            <div className="flex justify-between items-start gap-3 mb-4">
+        <h3 className="text-amber-50 text-xl font-bold font-sans tracking-tight">
+          {app.company}
+        </h3> 
+        <span className={`font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1 shrink-0`}>
+          {app.status}
+        </span>
+      </div> 
+        <p className="text-gray-300 text-sm font-medium mb-1">{app.role}</p>
+      <p className="text-xs text-slate-400">
+        Applied on: <span className="text-blue-300 font-medium">{app.date}</span>
+      </p>
+    </div>
           
        
-         <div className="mt-5 flex gap-2">
-          <button className=' text-white py-2 px-4 m-2 bg-white/20 border-white/30 hover:underline-offset hover:bg-blue-400 hover:border rounded-2xl' onClick={() => {
+         <div className="mt-6 pt-3 border-t border-slate-700/40 flex justify-end gap-2">
+          <button className=' text-slate-300 text-xs  font-medium py-1.5 px-3 m-2 bg-slate-700/60 border border-slate-600/40 hover:bg-blue-500 hover:text-white rounded-xl transition' onClick={() => {
             setEditingApp(app)
             setModal(true)
           }}>
             Edit
           </button>
-        <button className=' text-white py-2 px-4 m-2 bg-white/20 border border-white/30 hover:underline hover:border rounded-2xl hover:bg-red-600' onClick={() => {
+        <button className=' text-xs font-medium text-red-400 py-1.5 px-3 bg-red-950/20 m-2 bg-white/20 border border-red-900/30 hover:bg-red-600 hover:text-white rounded-xl transition' onClick={() => {
           const confirmed = window.confirm(`Delete application for ${app.company}? This cannot be undone.`)
           if (confirmed) {
             handleDeleteApplication(app.id)
@@ -131,9 +141,7 @@ focus-within:ring-2 focus-within:ring-blue-300">
         }}>
           Delete
         </button>
-        </div>
-          
-        
+        </div> 
         </div>
       
       )))}
