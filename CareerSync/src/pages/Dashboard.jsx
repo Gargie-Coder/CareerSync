@@ -59,7 +59,7 @@ const { applications, loading: isLoading } = useApplications()
     <div className='w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] pl-15 pr-15'>
       <div className="max-w-8xl mx-auto">
         <div className="pb-6 mb-6 border-b border-slate-800">
-  <h1 className='text-slate-50 text-left font-bold font-sans text-3xl tracking-tight'>Welcome back! {user.email}</h1>
+  <h1 className='text-slate-50 text-left font-bold font-sans text-3xl tracking-tight'>Welcome back!👋🏻 {user.displayName}</h1>
   <p className="text-sm text-slate-400 mt-1">Track, manage, and optimize your application pipeline.</p>
 </div>
         

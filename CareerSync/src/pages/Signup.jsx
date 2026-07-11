@@ -16,7 +16,7 @@ const Signup = () => {
     console.log("Name:",name)
     console.log("Email:", email)
     console.log("Password:", password)
-    signup(email,password).then((value)=>{
+    signup(name,email,password).then((value)=>{
       alert(`User created: ${name}`);
     }).catch((error)=>{
       const errorCode = error.code;
