@@ -9,7 +9,7 @@ export const Home = () => {
           <p className='text-4xl font-bold text-white m-4'>Welcome to CareerSync</p>
           <p className=' text-gray-300 bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent border-2 rounded-3xl backdrop-brightness-150 m-4 p-2 text-3xl w-fit'>Track Less. Land More.</p>
         </div>
-        <div className='flex flex-col gap-2 text-white m-4 text-4xl sm:text-6xl md:text-8xl lg:text-9xl'>
+        <div className='flex flex-col gap-2 text-white m-4 text-4xl sm:text-6xl md:text-8xl lg:text-8xl'>
         <h1 className='font-extrabold tracking-tight '>Your Job Search,</h1>
         <h1 className='font-extrabold tracking-tight '>finally <span className='bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-500 bg-clip-text text-transparent mb-4'>Organized.</span></h1>
         <p className='text-2xl text-gray-300 p-2 m-4 gap-4 leading-loose'>
