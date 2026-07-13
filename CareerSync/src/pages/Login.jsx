@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { getAuthErrorMessage } from '../constants/authErrors'
 
 
 const Login = () => {
@@ -22,9 +23,7 @@ const Login = () => {
       
       
     }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(`Error: ${errorMessage}`);
+      alert(getAuthErrorMessage(error.code));
     });
   }
   return (

@@ -3,6 +3,7 @@ import {STATUS_LABELS} from '../constants/status'
 const Modal = ({ isOpen, onClose,onAddApplication,
   editingApp,onUpdateApplication
  }) => {
+  const [errors, setErrors] = useState({})
   const [formData, setFormData] = useState({
     company: "",
     role: "",
@@ -42,7 +43,13 @@ const Modal = ({ isOpen, onClose,onAddApplication,
   }
 
   const handleSubmit = async (e) => {
-   e.preventDefault()// Prevent the default form submission behavior
+    e.preventDefault()// Prevent the default form submission behavio
+   const newErrors = validateForm()
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors)
+    return
+  }
+  setErrors({})
    if (editingApp) {
      await onUpdateApplication(editingApp.id, formData)
    } else {
@@ -59,6 +66,20 @@ const Modal = ({ isOpen, onClose,onAddApplication,
    })// Reset form data after submission
    onClose()
  }
+
+
+ const validateForm = () => {
+  const requiredFields = ["company", "role", "status", "date"]
+  const newErrors = {}
+
+  requiredFields.forEach((field) => {
+    if (formData[field] === "") {
+      newErrors[field] = `${field} is required`
+    }
+  })
+
+  return newErrors
+}
   
   return (
     <>
@@ -85,6 +106,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
                     className="w-full border border-gray-300 rounded-lg p-2" 
                     placeholder="e.g. Google" 
                   />
+                   {errors.company && <p className="text-red-500 text-sm mt-1">{errors.company}</p>}
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Role Title</label>
@@ -96,6 +118,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
                     className="w-full border border-gray-300 rounded-lg p-2" 
                     placeholder="e.g. Software Engineer" 
                   />
+                  {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
                 </div>
               </div>
 
@@ -138,6 +161,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
                     <option key={option} value={option}>{option}</option>
                   ))}
                 </select>
+                {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
               </div>
 
               {/* Row 3: Applied Date */}
@@ -150,6 +174,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
                   onChange={handleChange} 
                   className="w-full border border-gray-300 rounded-lg p-2" 
                 />
+                {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
               </div>
 
               {/* Row 4: Notes / Textarea */}
