@@ -359,3 +359,145 @@ Breaks an element out of a parent's `max-width` constraint to span the full view
 28. How does Tailwind's responsive prefix system (`sm:`, `md:`, `lg:`) resolve which class applies at a given width?
 29. Why does Tailwind silently ignore invalid/misspelled class names instead of erroring?
 30. What's the tradeoff of storing an "add or edit" mode as a single object-or-null prop rather than a separate boolean flag?
+
+
+# CareerSync — Milestone 13 & Security Rules Notes
+
+Continuation of the main build notes. Covers form validation, auth error handling, and the Firebase Realtime Database security rules fix.
+
+---
+
+## 19. Custom Form Validation (No HTML `required`)
+
+**Why custom over the native `required` attribute:** full control over error styling/messages to match the app's theme, instead of the browser's default validation tooltip.
+
+**The pattern — three pieces:**
+
+1. **`errors` state** — an object tracking which fields currently have a problem:
+```js
+const [errors, setErrors] = useState({})
+```
+
+2. **A `validateForm` function** — loops over just the *required* field names (not all of `formData`), checks each for emptiness, and builds an errors object:
+```js
+const validateForm = () => {
+  const requiredFields = ["company", "role", "status", "date"]
+  const newErrors = {}
+  requiredFields.forEach((field) => {
+    if (formData[field] === "") {
+      newErrors[field] = `${field} is required`
+    }
+  })
+  return newErrors
+}
+```
+   - `formData[field]` — computed property *access* (reading a dynamic key), same underlying idea as `[e.target.name]` used earlier for *writing*.
+   - `.forEach()` chosen over `.map()` here because the goal is a side effect (building up `newErrors`), not producing a new array from return values — `.map()` would be the wrong tool since its return value (an array of `undefined`s from an assignment expression) isn't what's needed.
+
+3. **Gate `handleSubmit` on validation result:**
+```js
+const handleSubmit = async (e) => {
+  e.preventDefault()
+  const newErrors = validateForm()
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors)
+    return   // stop here — do NOT submit
+  }
+  setErrors({})
+  // ...proceed with the actual add/update call
+}
+```
+   - `e.preventDefault()` called **before** the validation check — ensures the page never reloads regardless of whether validation passes or fails. If it were called only *after* a passing check, a failed submission would fall through to the browser's native reload behavior.
+   - `Object.keys(obj).length` — the standard way to check "does this object have any properties at all," used here to mean "are there any errors."
+
+**Displaying errors inline, per field:**
+```jsx
+{errors.company && <p className="text-red-500 text-sm mt-1">{errors.company}</p>}
+```
+   - Conditional rendering with `&&`: if `errors.company` is `undefined` (no error), the `&&` short-circuits and renders nothing; if it's a truthy string, the `<p>` renders.
+   - Placed directly inside each field's own wrapper `<div>`, immediately after that field's input — not in some central error-list block, since errors need to sit next to the field they describe.
+
+**Interview Q&A**
+- *Why validate manually instead of using HTML's `required` attribute?* Full control over error message content and visual styling; native validation UI is browser-default and inconsistent-looking across browsers.
+- *Why call `e.preventDefault()` before the validation check rather than after?* So the page never reloads on a failed submission either — the native form-submit behavior needs to be stopped unconditionally, not only on success.
+- *Why `.forEach()` instead of `.map()` when building the errors object?* `.forEach()` is for side effects (mutating `newErrors` as you go); `.map()` is for producing a new array from each item's return value — not what's needed here.
+- *How does `{errors.field && <JSX>}` work as a conditional render?* Short-circuit evaluation — `undefined && anything` is `undefined` (renders nothing); `"some string" && <JSX>` evaluates to the JSX (renders it).
+
+---
+
+## 20. Mapping Raw Firebase Error Codes to User-Friendly Messages
+
+**Problem:** Firebase's `error.message` is often technical/unfriendly (e.g. `"Firebase: Error (auth/wrong-password)."`), while `error.code` is a stable, predictable string identifier (e.g. `"auth/wrong-password"`).
+
+**Pattern — a lookup object, same shape as `STATUS_COLORS`:**
+```js
+// utils/authErrors.js
+export const getAuthErrorMessage = (errorCode) => {
+  const messages = {
+    "auth/wrong-password": "Incorrect password. Please try again.",
+    "auth/user-not-found": "No account found with this email.",
+    "auth/invalid-email": "Please enter a valid email address.",
+    "auth/email-already-in-use": "An account with this email already exists.",
+    "auth/weak-password": "Password should be at least 6 characters.",
+    "auth/invalid-credential": "Incorrect email or password.",
+  }
+  return messages[errorCode] || "Something went wrong. Please try again."
+}
+```
+- `messages[errorCode] || "Something went wrong..."` — same falsy-fallback pattern used elsewhere (`snapshot.val() || {}`). If the code isn't in the map, `messages[errorCode]` is `undefined` (falsy), so the fallback string is used instead — guarantees the user never sees `undefined` or a raw code for an error case that wasn't explicitly anticipated.
+- Built as one **shared** file, imported into both `Login.jsx` and `Signup.jsx`, rather than duplicating the mapping in each — same reasoning as centralizing `STATUS_COLORS`/`STATUS_LABELS`.
+
+**Interview Q&A**
+- *Why use `error.code` instead of `error.message` for building custom error UI?* `code` is a stable, known set of string identifiers safe to map against; `message` is meant for developers/logs and can be verbose or inconsistent.
+- *Why centralize this mapping in one shared file instead of writing it inline in each form?* Avoids duplicating the same lookup logic in multiple places — a single source of truth, easier to extend later.
+
+---
+
+## 21. Firebase Realtime Database Security Rules
+
+**Why this exists:** Realtime Database defaults to one of two modes when created — **test mode** (open access, no restrictions, meant only for early development) or **locked mode** (denies everyone by default). Test mode rules **automatically expire** (Firebase emails a warning beforehand) and revert to a fully locked, deny-all state — meaning an app relying on test mode will break entirely for every user once the window closes, unless real rules are published first.
+
+**The rule structure — mirrors the actual data tree:**
+```json
+{
+  "rules": {
+    "applications": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}
+```
+
+**Breaking it down:**
+- `"applications"` — matches the literal top-level key in the data tree.
+- `"$uid"` — a **wildcard segment**. The `$` prefix means "match any key at this level in the tree, and let this rule refer to that specific key's value as `$uid`." This lets one rule apply uniformly to every user's branch, rather than needing a hardcoded rule per user.
+- `".read"` / `".write"` — special rule keys (not real data) whose values are JavaScript-like boolean expressions, evaluated per request.
+- `auth != null` — checks a request is coming from an authenticated (logged-in) user at all.
+- `auth.uid === $uid` — the actual access-control check: compares **who is making the request** (`auth.uid`, from their Firebase Auth session) against **which user's branch they're trying to access** (`$uid`, from the path itself). These are two independently-determined values — a malicious or careless client could construct a request pointing at any path (Firebase config is public, visible in frontend JS), but this rule ensures the request is only fulfilled if the requester's own identity matches the branch being requested.
+
+**Why `&&` order matters (short-circuit evaluation):** if `auth != null` evaluates to `false`, JavaScript never evaluates `auth.uid === $uid` at all — the whole expression short-circuits to `false` immediately. This matters practically too: attempting `auth.uid` when `auth` is `null` would itself be invalid (`null.uid`), so checking `auth != null` first isn't just a logical convenience, it prevents a runtime error in the rule evaluation.
+
+**Interview Q&A**
+- *What happens to a Firebase Realtime Database if test-mode rules expire and nothing replaces them?* Access is denied to everyone, including the app's own legitimate authenticated users — the database locks down completely, not just "loses some security."
+- *What does the `$` prefix mean in a Realtime Database rule path?* A wildcard — matches any key at that position in the tree, and binds its actual value to that variable name for use inside the rule expression.
+- *Explain `auth.uid === $uid` — why are these two different things?* `$uid` is the user-branch being *requested* (from the path); `auth.uid` is the identity of *whoever is making the request* (from their session). The rule only allows access when they match — otherwise, any authenticated user could read/write any other user's data by simply pointing at a different path.
+- *Why check `auth != null` before `auth.uid === $uid` rather than the reverse order?* Short-circuit evaluation avoids evaluating `auth.uid` when `auth` doesn't exist (which would error), and also serves as the first, cheapest gate — reject unauthenticated requests immediately without further checks.
+- *Is a Firebase project's config (API keys, project ID) sensitive information that needs to be hidden from the client?* No — it's expected to be publicly visible in frontend code; real security comes from properly scoped Security Rules, not from hiding the config.
+
+---
+
+# Additional Interview Questions (Milestone 13 + Security)
+
+31. Why choose custom form validation over the browser's native `required` attribute?
+32. Why must `e.preventDefault()` run regardless of whether validation passes or fails?
+33. What's the difference in intent between `.forEach()` and `.map()`, and how do you decide which to use?
+34. How does `{condition && <JSX/>}` work as a lightweight conditional render?
+35. Why map Firebase's `error.code` to custom messages instead of showing `error.message` directly to users?
+36. What is the practical risk of leaving a Realtime Database in test mode indefinitely?
+37. What does a `$variable` wildcard do in a Firebase Security Rule path?
+38. Walk through how `auth.uid === $uid` prevents one authenticated user from accessing another's data.
+39. Why is it safe for Firebase config values to be publicly visible in client-side code?
+40. Why does evaluation order matter in a rule like `auth != null && auth.uid === $uid`?
