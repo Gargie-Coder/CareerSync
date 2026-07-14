@@ -2,6 +2,7 @@ import React, { Fragment, useState ,useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { addApplication,subscribeToApplications,updateApplication,deleteApplication} from '../services/addApplications'
 import {CgAdd, CgFilters} from "react-icons/cg"
+import { VscChevronDown, VscChevronUp } from "react-icons/vsc"
 import {AiOutlineSearch} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const [editingApp, setEditingApp] = useState(null)
   const[searchQuery,setSearchQuery]=useState("")
   const [statusFilter, setStatusFilter] = useState("")
+  const [expandedId, setExpandedId] = useState(null)
  
 const { applications, loading: isLoading } = useApplications()
   // Action: Triggered when the Modal form submits a new job application
@@ -95,7 +97,7 @@ const { applications, loading: isLoading } = useApplications()
 </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
          
-      <div className='pt-4 p-4  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+      <div className='pt-4 p-4 items-start grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         
         
         {applications.length===0?
@@ -118,11 +120,19 @@ const { applications, loading: isLoading } = useApplications()
         <span className={`font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1 shrink-0`}>
           {app.status}
         </span>
+        <button onClick={()=>setExpandedId(expandedId===app.id?null:app.id)}>{expandedId===app.id?(<VscChevronUp/>):(<VscChevronDown/>)}</button>
       </div> 
         <p className="text-gray-300 text-sm font-medium mb-1">{app.role}</p>
       <p className="text-xs text-slate-400">
         Applied on: <span className="text-blue-300 font-medium">{app.date}</span>
       </p>
+      {expandedId === app.id && (
+  <div className="mt-4 pt-3 border-t border-slate-700/40 text-sm text-slate-300 space-y-1">
+    <p>Location: <span className="text-slate-100">{app.location || "Not specified"}</span></p>
+    <p>Salary: <span className="text-slate-100">{app.salary || "Not specified"}</span></p>
+    <p>Notes: <span className="text-slate-100">{app.notes || "No notes"}</span></p>
+  </div>
+)}
     </div>
           
        
