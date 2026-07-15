@@ -39,7 +39,8 @@ const interviewpercentage = total > 0 ? (interviewCount / total) * 100 : 0
           cy="60"
           r={radius}
           fill="none"
-          stroke="#334155"
+          stroke="currentColor"
+          className="text-slate-200 dark:text-slate-700"
           strokeWidth="10"
         />
         <circle
@@ -55,8 +56,8 @@ const interviewpercentage = total > 0 ? (interviewCount / total) * 100 : 0
           transform="rotate(-90 60 60)"
         />
       </svg>
-      <div className="text-2xl font-bold text-white -mt-20">{Math.round(percentage)}%</div>
-      <div className="text-gray-400 mt-16">{label}</div>
+      <div className="text-2xl font-bold text-slate-800 dark:text-white -mt-20">{Math.round(percentage)}%</div>
+      <div className="text-slate-500 dark:text-gray-400 mt-16">{label}</div>
     </div>
   )
 }
@@ -64,17 +65,17 @@ const interviewpercentage = total > 0 ? (interviewCount / total) * 100 : 0
   return (
    <>
    <div className="max-w-6xl mx-auto px-6">
-    <h1 className="text-3xl font-semibold text-amber-100 mb-6">Analytics</h1>
+    <h1 className="text-3xl font-semibold text-slate-800 dark:text-amber-100 mb-6">Analytics</h1>
    <div className="flex flex-col lg:flex-row gap-6">
      
-   <div className="flex-1 mt-8 p-4 bg-slate-700/10 rounded-lg shadow-md">
+   <div className="flex-1 mt-8 p-6 bg-white dark:bg-slate-700/10 border border-slate-200 dark:border-transparent rounded-2xl shadow-sm dark:shadow-md text-slate-800 dark:text-slate-200">
        {chartData.map((entry, index) => (
       <div key={entry.status} className="mb-4">
-        <div className="flex justify-between mb-1">
+        <div className="flex justify-between mb-1 text-sm font-medium">
           <span>{entry.status}</span>
           <span>{entry.count}</span>
         </div>
-        <div className="w-full bg-slate-700 rounded-full h-2">
+        <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
           <div
             className="h-2 rounded-full"
             style={{ width: `${entry.percentage}%`, backgroundColor: COLORS[index % COLORS.length] }}
@@ -84,26 +85,26 @@ const interviewpercentage = total > 0 ? (interviewCount / total) * 100 : 0
      
     ))}
    </div>
-    <div className="flex-1 flex justify-around items-center mt-8 bg-slate-700/10 rounded-2xl h-60 p-4">
+    <div className="flex-1 flex justify-around items-center mt-8 bg-white dark:bg-slate-700/10 border border-slate-200 dark:border-transparent rounded-2xl h-60 p-4 shadow-sm dark:shadow-md">
      <CircularProgress percentage={offerpercentage} color="#22c55e" label="Offer rate" />
 <CircularProgress percentage={interviewpercentage} color="#3b82f6" label="Interview pipeline" />
     </div>
     </div>
     </div>
 
-    <div className="mt-8 p-4 bg-slate-700/10 rounded-lg shadow-md">
-      <h2 className="text-xl text-amber-100 font-semibold mb-4">Recent Activity</h2>
+    <div className="mt-8 p-6 bg-white dark:bg-slate-700/10 border border-slate-200 dark:border-transparent rounded-2xl shadow-sm dark:shadow-md">
+      <h2 className="text-xl text-slate-800 dark:text-amber-100 font-semibold mb-4">Recent Activity</h2>
       {recent_applications.map((activity) => (
-  <div key={activity.id} className="flex justify-between items-center py-3 border-b border-slate-700 last:border-0">
+  <div key={activity.id} className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700 last:border-0">
     <div>
-      <p className="text-white font-semibold">{activity.company}</p>
-      <p className="text-gray-400 text-sm">{activity.role}</p>
+      <p className="text-slate-800 dark:text-white font-semibold">{activity.company}</p>
+      <p className="text-slate-500 dark:text-gray-400 text-sm">{activity.role}</p>
     </div>
     <div className="text-right">
       <span className={`inline-block rounded-full text-xs px-3 py-1 ${STATUS_COLORS[activity.status]}`}>
         {activity.status}
       </span>
-      <p className="text-gray-400 text-sm mt-1">{activity.date}</p>
+      <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">{activity.date}</p>
     </div>
   </div>
 ))}

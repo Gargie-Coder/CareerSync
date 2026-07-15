@@ -11,10 +11,12 @@ import PublicRoute from './components/PublicRoute'
 import { Home } from './pages/Home'
 import Analytics from './pages/Analytics'
 import { ApplicationsProvider } from './context/ApplicationContext'
+import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
   return (
     <BrowserRouter>
+    <ThemeProvider>
      <AuthProvider>
     <ApplicationsProvider>
       <Layout>
@@ -35,7 +37,7 @@ function App() {
     </Layout>
     </ApplicationsProvider>
     </AuthProvider>
-    
+    </ThemeProvider>
     </BrowserRouter>
   )
 }
