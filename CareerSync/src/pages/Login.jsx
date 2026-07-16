@@ -27,15 +27,15 @@ const Login = () => {
     });
   }
   return (
-    <div className='flex flex-col justify-center items-center h-[500px]  bg-slate-900 w-100 m-auto border-2 border-gray-300 rounded-lg shadow-xl shadow-slate-500 text-slate-100 my-25'>
-      <h1 className='text-3xl text-slate-100 font-bold mb-4'>Login</h1>
+    <div className='flex flex-col justify-center items-center h-[500px] bg-white dark:bg-slate-900 w-100 m-auto border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl shadow-slate-300/50 dark:shadow-slate-950/50 text-slate-900 dark:text-slate-100 my-25'>
+      <h1 className='text-3xl text-slate-900 dark:text-slate-100 font-bold mb-4'>Login</h1>
       <form className='flex flex-col w-80' onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" className='mb-4 p-2 border-2 border-gray-300 rounded-lg shadow-md' value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" className='mb-4 p-2 border-2 border-gray-300 rounded-lg shadow-md' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit" className='bg-blue-500 border-2 border-blue-300 rounded-lg shadow-md hover:bg-blue-700 text-white font-bold py-2 px-4'>
+        <input type="email" placeholder="Email" className='mb-4 p-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Password" className='mb-4 p-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition' value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button type="submit" className='bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 rounded-lg shadow-md text-white font-bold py-2 px-4 transition'>
           Login
         </button>
-        <p className='my-4 text-center text-slate-200'>Don't have account,<Link to="/signup" className='text-blue-500 hover:text-cyan-200'>Signup</Link></p>
+        <p className='my-4 text-center text-slate-600 dark:text-slate-300'>Don't have account,<Link to="/signup" className='text-sky-600 dark:text-blue-400 hover:text-sky-500 dark:hover:text-cyan-200 transition-colors'>Signup</Link></p>
       </form>
 
     </div>

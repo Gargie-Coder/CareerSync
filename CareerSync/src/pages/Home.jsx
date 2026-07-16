@@ -17,17 +17,17 @@ export const Home = () => {
         </p>
         </div>
         <div className='inline-flex gap-4 m-4'>
-       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-white/20 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white/80 text-3xl font-medium mb-8 font-mono">
+       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 dark:border-white/20 bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white/80 text-base font-medium mb-8 font-mono">
   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
   Free · No Distractions · Works instantly
 </div> 
         </div>
       </div>
     </section>
-    <section className="flex justify-around gap-4 mb-20 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10 text-2xl">
+    <section className="flex flex-wrap justify-center gap-4 mb-20 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-10 text-2xl">
 
       {features.map((feature, index) => (
-        <div key={feature.title} className="bg-slate-50 dark:bg-white/10 text-slate-800 dark:text-slate-200 w-fit border border-slate-200 dark:border-white/20 rounded-lg p-4 ">
+        <div key={feature.title} className="bg-slate-50 dark:bg-white/10 text-slate-800 dark:text-slate-200 w-72 border border-slate-200 dark:border-white/20 rounded-lg p-4 transition-colors hover:border-sky-400 dark:hover:border-sky-500">
         {/*title is used as a key because even if the items are rearranged, the title will remain the same and can be used to identify the item uniquelywhile if we use index as a key, it will change if the items are rearranged and can cause issues with rendering and performance. */}
           <span className="font-bold block text-slate-900 dark:text-white">{feature.title}</span>
           <p>{feature.description}</p>
