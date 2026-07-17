@@ -24,7 +24,7 @@ const Signup = () => {
     });
   }
   return (
-    <div className='flex flex-col justify-center items-center h-[500px] bg-white dark:bg-slate-900 w-100 m-auto border border-slate-300 dark:border-slate-700 rounded-lg shadow-xl shadow-slate-300/50 dark:shadow-slate-950/50 dark:text-slate-100 my-25'>
+    <div className='flex flex-col justify-center items-center min-h-[500px] bg-white dark:bg-slate-900 max-w-md w-[90%] m-auto border border-slate-300 dark:border-slate-700 rounded-lg shadow-xl shadow-slate-300/50 dark:shadow-slate-950/50 dark:text-slate-100 my-25'>
       <h1 className='text-3xl dark:text-slate-100 font-bold mb-4'>Signup</h1>
       <form onSubmit={handleSubmit} className='flex flex-col'>
         <input type='text' placeholder='Enter name' value={name} onChange={(e)=>{setName(e.target.value)}} className=' mb-4 border-2 border-slate-300 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition p-2 text-xl'/>
