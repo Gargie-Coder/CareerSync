@@ -114,15 +114,19 @@ const { applications, loading: isLoading } = useApplications()
       :filteredApplications.map((app) => (
            <div key={app.id} className='card bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/50  transform transition duration-300 ease-in-out rounded-2xl hover:scale-105 p-5 shadow-black/10 dark:shadow-black/30 shadow-lg flex flex-col justify-between'>
             <div>
-            <div className="flex justify-between items-start gap-3 mb-4">
-        <h3 className=" text-slate-900 dark:text-white text-xl font-bold font-sans tracking-tight">
-          {app.company}
-        </h3> 
-        <span className={` font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1 shrink-0`}>
-          {app.status}
-        </span>
-        <button className="p-1 rounded-full transition-colors hover:bg-slate-200/60 dark:hover:bg-slate-700/60 text-slate-500 dark:text-slate-300" onClick={()=>setExpandedId(expandedId===app.id?null:app.id)}>{expandedId===app.id?(<VscChevronUp/>):(<VscChevronDown/>)}</button>
-      </div> 
+            <div className="mb-4">
+  <h3 className="text-slate-900 dark:text-white text-xl font-bold font-sans tracking-tight mb-2">
+    {app.company}
+  </h3>
+  <div className="flex justify-between items-center gap-2">
+    <span className={`font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1`}>
+      {app.status}
+    </span>
+    <button className="p-1 rounded-full transition-colors hover:bg-slate-200/60 dark:hover:bg-slate-700/60 text-slate-500 dark:text-slate-300" onClick={()=>setExpandedId(expandedId===app.id?null:app.id)}>
+      {expandedId===app.id?(<VscChevronUp/>):(<VscChevronDown/>)}
+    </button>
+  </div>
+</div>
         <p className="text-sky-600 dark:text-gray-300 text-sm font-medium mb-1">{app.role}</p>
       <p className="text-xs text-slate-400">
         Applied on: <span className=" dark:text-sky-300 font-medium">{app.date}</span>
