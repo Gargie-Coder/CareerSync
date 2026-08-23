@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {useAuth} from '../context/AuthContext'
 import { getAuthErrorMessage } from '../constants/authErrors';
+import { FcGoogle } from 'react-icons/fc'
 
 
 const Signup = () => {
-  const {signup}=useAuth()
+  const {signup,signInWithGoogle}=useAuth()
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [name,setName]=useState("");
@@ -20,6 +21,12 @@ const Signup = () => {
     signup(name,email,password).then((value)=>{
       alert(`User created: ${name}`);
     }).catch((error)=>{
+      alert(getAuthErrorMessage(error.code));
+    });
+  }
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle().catch((error) => {
       alert(getAuthErrorMessage(error.code));
     });
   }
@@ -37,6 +44,22 @@ const Signup = () => {
         <Link to="/login" className='font-bold text-sky-600 dark:text-blue-400 hover:text-sky-500 dark:hover:text-cyan-200 transition-colors text-center rounded-lg'>Login</Link>
 
       </form>
+
+      <div className='flex items-center gap-3 w-full max-w-[280px] my-2'>
+        <div className='flex-1 h-px bg-slate-200 dark:bg-slate-700'></div>
+        <span className='text-xs text-slate-400 dark:text-slate-500'>OR</span>
+        <div className='flex-1 h-px bg-slate-200 dark:bg-slate-700'></div>
+      </div>
+
+      <button
+        type="button"
+        onClick={handleGoogleSignIn}
+        className='flex items-center justify-center gap-2 w-full max-w-[280px] mb-6 py-2 px-4 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-lg shadow-sm transition'
+      >
+        <FcGoogle className='text-xl'/>
+        Continue with Google
+      </button>
+
     </div>
   )
 }

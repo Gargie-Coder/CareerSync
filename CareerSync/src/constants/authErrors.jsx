@@ -1,3 +1,4 @@
+
 export const getAuthErrorMessage = (errorCode) => {
   const messages = {
     "auth/wrong-password": "Incorrect password. Please try again.",
@@ -6,6 +7,7 @@ export const getAuthErrorMessage = (errorCode) => {
     "auth/email-already-in-use": "An account with this email already exists.",
     "auth/weak-password": "Password should be at least 6 characters.",
     "auth/invalid-credential": "Incorrect email or password.",
+    "auth/popup-closed-by-user": "Sign-in was cancelled.",
   }
   return messages[errorCode] || "Something went wrong. Please try again."
 }
