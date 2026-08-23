@@ -9,6 +9,18 @@ import Modal from '../components/Modal'
 import { STATUS_LABELS,STATUS_COLORS } from '../constants/status'
 import { useApplications } from '../context/ApplicationContext'
 
+// Returns whole days elapsed since dateString (an application's applied date).
+function daysSince(dateString) {
+  const appliedDate = new Date(dateString)
+  const today = new Date()
+  const msPerDay = 1000 * 60 * 60 * 24
+  const diffInMs = today - appliedDate
+  return Math.floor(diffInMs / msPerDay)
+}
+
+// Applications sitting untouched past this many days get flagged as stale.
+const STALE_THRESHOLD_DAYS = 14
+
 
 
 const Dashboard = () => {
@@ -180,7 +192,9 @@ const { applications, loading: isLoading } = useApplications()
         No applications found for "{searchQuery}". Try a different search term or add a new application.
       </p>
         
-      :sortedApplications.map((app) => (
+      :sortedApplications.map((app) => {
+        const isStale = app.status !== "Rejected" && app.status !== "Offer" && daysSince(app.date) >= STALE_THRESHOLD_DAYS
+        return (
            <div key={app.id} className='card bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/50  transform transition duration-300 ease-in-out rounded-2xl hover:scale-105 p-5 shadow-black/10 dark:shadow-black/30 shadow-lg flex flex-col justify-between'>
             <div>
             <div className="mb-4">
@@ -188,9 +202,16 @@ const { applications, loading: isLoading } = useApplications()
     {app.company}
   </h3>
   <div className="flex justify-between items-center gap-2">
-    <span className={`font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1`}>
-      {app.status}
-    </span>
+    <div className="flex items-center gap-1.5 flex-wrap">
+      <span className={`font-semibold text-xs rounded-full ${STATUS_COLORS[app.status]} px-2.5 py-1`}>
+        {app.status}
+      </span>
+      {isStale && (
+        <span className="font-semibold text-xs rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 px-2.5 py-1">
+          {daysSince(app.date)}d, no update
+        </span>
+      )}
+    </div>
     <button className="p-1 rounded-full transition-colors hover:bg-slate-200/60 dark:hover:bg-slate-700/60 text-slate-500 dark:text-slate-300" onClick={()=>setExpandedId(expandedId===app.id?null:app.id)}>
       {expandedId===app.id?(<VscChevronUp/>):(<VscChevronDown/>)}
     </button>
@@ -226,8 +247,9 @@ const { applications, loading: isLoading } = useApplications()
         </button>
         </div> 
         </div>
-      
-      )))}
+      )
+      })
+      )}
     </div> 
       </div>
        
