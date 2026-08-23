@@ -1,9 +1,9 @@
 import React, { Fragment, useState ,useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { addApplication,subscribeToApplications,updateApplication,deleteApplication} from '../services/addApplications'
-import {CgAdd, CgFilters} from "react-icons/cg"
+import {CgAdd, CgFilters, CgSortAz} from "react-icons/cg"
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc"
-import {AiOutlineSearch} from "react-icons/ai"
+import {AiOutlineSearch, AiOutlineDownload} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
 import { STATUS_LABELS,STATUS_COLORS } from '../constants/status'
@@ -20,6 +20,7 @@ const Dashboard = () => {
   const[searchQuery,setSearchQuery]=useState("")
   const [statusFilter, setStatusFilter] = useState("")
   const [expandedId, setExpandedId] = useState(null)
+  const [sortBy, setSortBy] = useState("newest")
  
 const { applications, loading: isLoading } = useApplications()
   // Action: Triggered when the Modal form submits a new job application
@@ -50,6 +51,41 @@ const { applications, loading: isLoading } = useApplications()
     return app.company.toLowerCase().includes(searchQuery.toLowerCase()) && (statusFilter ? app.status === statusFilter : true)
   })//here we are filtering the applications based on the search query and status filter. If the status filter is empty, we include all statuses,because it is a ternary operator that checks if statusFilter is truthy. If it is, we check if the application's status matches the filter; if not, we include all applications regardless of their status.
 
+  // Sort the already-filtered list. [...array] copies before sorting so we never mutate
+  // filteredApplications (which is itself a fresh array from .filter(), but this keeps the
+  // pattern explicit and safe if the sort logic changes later).
+  const sortedApplications = [...filteredApplications].sort((a, b) => {
+    if (sortBy === "company-asc") return a.company.localeCompare(b.company)
+    if (sortBy === "oldest") return new Date(a.date) - new Date(b.date)
+    return new Date(b.date) - new Date(a.date) // "newest" (default)
+  })
+
+  // Quick pipeline stats for the summary strip. Derived from `applications` (not the
+  // filtered/sorted view) so the numbers stay stable while the user searches or filters.
+  const totalCount = applications.length
+  const offerCount = applications.filter((app) => app.status === "Offer").length
+  const interviewCount = applications.filter((app) => app.status === "HR Interview" || app.status === "Technical Interview").length
+  const activeCount = applications.filter((app) => app.status !== "Rejected" && app.status !== "Offer").length
+
+  // Exports the current applications as a CSV file the user can open in Excel/Sheets.
+  const handleExportCsv = () => {
+    const headers = ["Company", "Role", "Status", "Applied Date", "Location", "Salary", "Notes"]
+    const rows = applications.map((app) => [
+      app.company, app.role, app.status, app.date, app.location || "", app.salary || "", app.notes || ""
+    ])
+    // Wrap each cell in quotes and escape existing quotes, so commas/newlines inside a field don't break the CSV.
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\n")
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "careersync-applications.csv"
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   // Effect: Sets up the real-time database listener on component mount
   
     return (
@@ -64,6 +100,20 @@ const { applications, loading: isLoading } = useApplications()
   <h1 className='text-slate-800 dark:text-slate-50 text-left font-bold font-sans text-3xl tracking-tight'>Welcome back!👋🏻 {user.displayName}</h1>
   <p className="text-sm text-sky-600 dark:text-slate-400 mt-1">Track, manage, and optimize your application pipeline.</p>
 </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: "Total Applications", value: totalCount, accent: "text-sky-600 dark:text-sky-400" },
+          { label: "Active Pipeline", value: activeCount, accent: "text-cyan-600 dark:text-cyan-400" },
+          { label: "In Interviews", value: interviewCount, accent: "text-orange-600 dark:text-orange-400" },
+          { label: "Offers", value: offerCount, accent: "text-green-600 dark:text-green-400" },
+        ].map((stat) => (
+          <div key={stat.label} className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-4 shadow-sm">
+            <p className={`text-2xl font-bold ${stat.accent}`}>{stat.value}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{stat.label}</p>
+          </div>
+        ))}
+      </div>
         
       <div className='flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-8'>
        
@@ -72,7 +122,7 @@ const { applications, loading: isLoading } = useApplications()
         }}>
          <CgAdd className="text-xl"/>Add Application
         </button>  
-                  <div className="flex flex-col sm:flex-row items-center gap-3 flex-1 max-w-2xl justify-end">
+                  <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3 flex-1 max-w-3xl justify-end">
                     <div className='flex items-center p-2.5 w-full sm:w-72 rounded-xl border border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-transparent transition'>
                     <AiOutlineSearch className="text-xl 
                     text-slate-400 
@@ -94,6 +144,25 @@ const { applications, loading: isLoading } = useApplications()
     ))}
   </select>
 </div>
+<div className="flex items-center p-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-transparent transition w-full sm:w-44">
+  <CgSortAz className="text-xl text-slate-400 dark:text-slate-400 mr-2 shrink-0"/>
+  <select
+    className="bg-transparent text-slate-700 dark:text-white text-sm outline-none w-full cursor-pointer appearance-none"
+    onChange={(e) => setSortBy(e.target.value)}
+    value={sortBy}
+  >
+    <option value="newest" className="bg-slate-100 dark:bg-slate-800 text-black dark:text-white">Newest first</option>
+    <option value="oldest" className="bg-slate-100 dark:bg-slate-800 text-black dark:text-white">Oldest first</option>
+    <option value="company-asc" className="bg-slate-100 dark:bg-slate-800 text-black dark:text-white">Company A-Z</option>
+  </select>
+</div>
+<button
+  className="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-white hover:border-sky-400 dark:hover:border-sky-500 transition shrink-0"
+  onClick={handleExportCsv}
+  title="Export applications as CSV"
+>
+  <AiOutlineDownload className="text-xl"/>
+</button>
 </div>
 </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
@@ -111,7 +180,7 @@ const { applications, loading: isLoading } = useApplications()
         No applications found for "{searchQuery}". Try a different search term or add a new application.
       </p>
         
-      :filteredApplications.map((app) => (
+      :sortedApplications.map((app) => (
            <div key={app.id} className='card bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/50  transform transition duration-300 ease-in-out rounded-2xl hover:scale-105 p-5 shadow-black/10 dark:shadow-black/30 shadow-lg flex flex-col justify-between'>
             <div>
             <div className="mb-4">
