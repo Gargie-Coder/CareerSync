@@ -6,6 +6,7 @@ import { VscChevronDown, VscChevronUp } from "react-icons/vsc"
 import {AiOutlineSearch, AiOutlineDownload} from "react-icons/ai"
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal'
+import AIMatchModal from '../components/AIMatchModal'
 import { STATUS_LABELS,STATUS_COLORS } from '../constants/status'
 import { useApplications } from '../context/ApplicationContext'
 
@@ -32,6 +33,7 @@ const Dashboard = () => {
   const[searchQuery,setSearchQuery]=useState("")
   const [statusFilter, setStatusFilter] = useState("")
   const [expandedId, setExpandedId] = useState(null)
+  const [aiMatchApp, setAiMatchApp] = useState(null)
   const [sortBy, setSortBy] = useState("newest")
  
 const { applications, loading: isLoading } = useApplications()
@@ -178,6 +180,7 @@ const { applications, loading: isLoading } = useApplications()
 </div>
 </div>
        <Modal isOpen={isModalOpen} onClose={() => {setModal(false); setEditingApp(null)}} onAddApplication={handleAddApplication} onUpdateApplication={handleUpdateApplication}  editingApp={editingApp}/>
+       <AIMatchModal isOpen={!!aiMatchApp} onClose={() => setAiMatchApp(null)} application={aiMatchApp}/>
          
       <div className='pt-4 p-4 items-start grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         
@@ -231,6 +234,9 @@ const { applications, loading: isLoading } = useApplications()
     </div>
           
          <div className="mt-6 pt-3 border-t border-slate-200 dark:border-slate-700/40 flex justify-end gap-2">
+          <button className='text-violet-600 dark:text-violet-400 text-xs font-medium py-1.5 px-3 m-2 bg-white dark:bg-slate-700/60 border border-violet-300 dark:border-violet-600/40 hover:bg-violet-500 dark:hover:bg-violet-500 hover:text-white rounded-xl transition' onClick={() => setAiMatchApp(app)}>
+            AI Match
+          </button>
           <button className='text-slate-700 dark:text-slate-300 text-xs  font-medium py-1.5 px-3 m-2 bg-white dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600/40 hover:bg-sky-500 dark:hover:bg-sky-500   hover:text-white rounded-xl transition' onClick={() => {
             setEditingApp(app)
             setModal(true)

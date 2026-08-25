@@ -11,7 +11,8 @@ const Modal = ({ isOpen, onClose,onAddApplication,
     salary: "",
     date: "",
     notes: "",
-    status:""
+    status:"",
+    requiredSkills: ""
   })
  
   useEffect(() => {
@@ -24,6 +25,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
       date: editingApp.date,
       notes: editingApp.notes,
       status: editingApp.status,
+      requiredSkills: editingApp.requiredSkills || "",
     })
   } else {
     setFormData({
@@ -34,6 +36,7 @@ const Modal = ({ isOpen, onClose,onAddApplication,
       date: "",
       notes: "",
       status: "",
+      requiredSkills: "",
     })
   }
 }, [editingApp])
@@ -188,6 +191,19 @@ const Modal = ({ isOpen, onClose,onAddApplication,
                   className="w-full p-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900/60 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 rounded-lg outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition" 
                   placeholder="Type your long message here... (Enter creates a new line)">
                 </textarea>
+              </div>
+
+              {/* Row 5: Required Skills (optional, comma-separated) — used by AI Match */}
+              <div>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Required Skills <span className="font-normal text-slate-400">(optional, comma-separated)</span></label>
+                <input
+                  type="text"
+                  name="requiredSkills"
+                  value={formData.requiredSkills}
+                  onChange={handleChange}
+                  className="w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900/60 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 rounded-lg p-2 outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition"
+                  placeholder="e.g. Python, React, Node.js, SQL"
+                />
               </div>
 
               <button type="submit" className="bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white py-2.5 rounded-lg mt-2 font-medium shadow-md shadow-blue-900/20 transition">
